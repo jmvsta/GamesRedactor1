@@ -1,7 +1,7 @@
 package me.dmitr.model
 
-import me.dmitr.entity.Entity
+import me.dmitr.entity.AbstractEntity
 
-data class Request<T: Entity> (
+data class Request<T: AbstractEntity> (
     val entity: T
 )

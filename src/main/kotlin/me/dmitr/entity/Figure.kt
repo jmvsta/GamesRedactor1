@@ -11,4 +11,4 @@ data class Figure (
   override var description: String,
   val color: Short,
   val type: FigureType
-) : Entity()
+) : AbstractEntity()

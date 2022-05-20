@@ -13,6 +13,6 @@ data class Game (
   override var description: String,
   val xSize: Short,
   val ySize: Short,
-  @DocumentReference(lazy=true)
+//  @DocumentReference(lazy=true)
   val figures: List<Figure>
-) : Entity()
+) : AbstractEntity()

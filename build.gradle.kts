@@ -24,6 +24,20 @@ dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.6.7")
 //// https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-core
 //    implementation("org.mongodb:mongodb-driver-core:4.6.0")
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux
+    implementation("org.springframework.boot:spring-boot-starter-webflux:2.6.7")
+// https://mvnrepository.com/artifact/io.projectreactor.kotlin/reactor-kotlin-extensions
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.6")
+// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-reactor
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.1")
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-configuration-processor
+    implementation("org.springframework.boot:spring-boot-configuration-processor:2.6.7")
+// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.6.7")
+// https://mvnrepository.com/artifact/org.mockito/mockito-core
+    testImplementation("org.mockito:mockito-core:4.5.1")
+
+
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

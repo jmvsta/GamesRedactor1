@@ -6,9 +6,9 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface GamesRepository: MongoRepository<Game, String> {
+interface GamesRepository: MongoRepository<Game, ObjectId> {
 
-    fun findOneById(id: ObjectId): Game
+//    fun findOneById(id: ObjectId): Game
     override fun deleteAll()
 
 }
