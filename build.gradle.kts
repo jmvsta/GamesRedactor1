@@ -18,11 +18,8 @@ repositories {
 
 dependencies {
 //    testImplementation(kotlin("test"))
-//    // https://mvnrepository.com/artifact/org.mongodb/mongodb-driver
 //    implementation("org.mongodb:mongodb-driver:3.12.11")
-//// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-mongodb
 //    implementation("org.springframework.boot:spring-boot-starter-data-mongodb:2.6.7")
-//// https://mvnrepository.com/artifact/org.mongodb/mongodb-driver-core
 //    implementation("org.mongodb:mongodb-driver-core:4.6.0")
     implementation("org.springframework.boot:spring-boot-starter-webflux:2.6.7")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.6")
@@ -32,7 +29,7 @@ dependencies {
 //    testImplementation("org.mockito:mockito-core:4.5.1")
     implementation("com.ninja-squad:springmockk:3.1.1")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+//    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -52,5 +49,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("ApplicationKt")
+    mainClass.set("GamesRedactorKt")
 }
