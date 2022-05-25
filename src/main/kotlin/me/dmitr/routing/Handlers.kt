@@ -4,7 +4,8 @@ import me.dmitr.data.Game
 import org.bson.types.ObjectId
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository
+import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
@@ -15,33 +16,39 @@ class GamesHandler {
 
     @Qualifier("gamesRepository")
     @Autowired
-    lateinit var repository: MongoRepository<Game, ObjectId>
+    lateinit var gamesRepository : ReactiveMongoRepository<Game, ObjectId>
 
     fun create(request: ServerRequest) : Mono<ServerResponse> {
         return Mono.empty()
     }
 
      fun read(request: ServerRequest) : Mono<ServerResponse> {
-//        val entityOptional = repository.findById(id)
-//            entityOptional.ifPresentOrElse(() -> Mono.empty(), )
-//            entityOptional.ifPresentOrElse({
-//                return@ifPresentOrElse Mono.just(it)
-//            }, {
-//                return Mono.empty()
-//            })
-        return Mono.empty()
-    }
+         return ServerResponse
+             .ok()
+             .contentType(MediaType.APPLICATION_JSON)
+             .body(gamesRepository.findById(ObjectId(request.pathVariable("id"))), Game::class.java)
+     }
 
     fun readAll(request: ServerRequest) : Mono<ServerResponse> {
-        return Mono.empty()
+        return ServerResponse
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(gamesRepository.findAll(), Game::class.java)
     }
 
     fun update(request: ServerRequest) : Mono<ServerResponse> {
+        //        val retrievedGame = request.awaitBodyOrNull(Game::class)
+//            ?: return Mono.just(ServerResponse.badRequest().buildAndAwait())
+//        repository.save(retrievedGame)
+//        var oldEntity = gamesRepository.findById(ObjectId(request.pathVariable("id")))
         return Mono.empty()
     }
 
     fun delete(request: ServerRequest) : Mono<ServerResponse> {
-        return Mono.empty()
+        return ServerResponse
+            .ok()
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(gamesRepository.deleteById(ObjectId(request.pathVariable("id"))), Game::class.java)
     }
 
 
@@ -50,9 +57,7 @@ class GamesHandler {
 @Component
 class FiguresHandler {
 
-    @Qualifier("figuresRepository")
-    @Autowired
-    lateinit var repository: MongoRepository<Game, ObjectId>
+//    @Autowired lateinit var figuresRepository: FiguresRepository
 
     fun create(request: ServerRequest) : Mono<ServerResponse> {
         return Mono.empty()
