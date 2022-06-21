@@ -37,10 +37,6 @@ class GamesHandler {
     }
 
     fun update(request: ServerRequest) : Mono<ServerResponse> {
-        //        val retrievedGame = request.awaitBodyOrNull(Game::class)
-//            ?: return Mono.just(ServerResponse.badRequest().buildAndAwait())
-//        repository.save(retrievedGame)
-//        var oldEntity = gamesRepository.findById(ObjectId(request.pathVariable("id")))
         return Mono.empty()
     }
 
@@ -51,26 +47,15 @@ class GamesHandler {
             .body(gamesRepository.deleteById(ObjectId(request.pathVariable("id"))), Game::class.java)
     }
 
-
 }
 
 @Component
 class FiguresHandler {
-
-//    @Autowired lateinit var figuresRepository: FiguresRepository
-
     fun create(request: ServerRequest) : Mono<ServerResponse> {
         return Mono.empty()
     }
 
      fun read(request: ServerRequest) : Mono<ServerResponse> {
-//        val entityOptional = repository.findById(id)
-//            entityOptional.ifPresentOrElse(() -> Mono.empty(), )
-//            entityOptional.ifPresentOrElse({
-//                return@ifPresentOrElse Mono.just(it)
-//            }, {
-//                return Mono.empty()
-//            })
         return Mono.empty()
     }
 
@@ -85,6 +70,5 @@ class FiguresHandler {
     fun delete(request: ServerRequest) : Mono<ServerResponse> {
         return Mono.empty()
     }
-
 
 }
