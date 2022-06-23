@@ -6,15 +6,12 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 abstract class Entity {
     abstract var id: ObjectId
-    abstract var name: String?
-    abstract var description: String?
 }
 
 data class Figure(
     @Id
     override var id: ObjectId,
-    override var name: String?,
-    override var description: String?,
+    var name: String,
     var color: Short,
     var type: FigureType
 ): Entity()
@@ -23,11 +20,8 @@ data class Figure(
 data class Game(
     @Id
     override var id: ObjectId,
-    override var name: String?,
-    override var description: String?,
     var xSize: Short,
     var ySize: Short,
-//  @DocumentReference(lazy=true)
     var figures: List<Figure>?
 ): Entity()
 
@@ -35,15 +29,11 @@ data class Game(
 data class Player(
     @Id
     override var id: ObjectId,
-    override var name: String?,
-    override var description: String?,
     var login: String,
     var inventory: Inventory?
 ): Entity()
 
 data class Inventory(
     @Id
-    override var id: ObjectId,
-    override var name: String?,
-    override var description: String?,
+    override var id: ObjectId
 ): Entity()

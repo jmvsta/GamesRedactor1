@@ -24,8 +24,6 @@ class GamesRouterTest(@Autowired private val client: WebTestClient) {
 
     private fun aGame() = Game (
             id = ObjectId("542c2b97bac0505474109b41"),
-            name = "name",
-            description = "description",
             xSize = 8,
             ySize = 8,
             figures = null
@@ -118,7 +116,6 @@ class FiguresRouterTest(@Autowired private val client: WebTestClient) {
     private fun aFigure() = Figure(
         id = ObjectId("542c2b97bac0505474109b41"),
         name = "name",
-        description = "description",
         color = 1,
         type = CHECKER
     )
@@ -209,8 +206,6 @@ class PlayersRouterTest(@Autowired private val client: WebTestClient) {
 
     private fun aPlayer() = Player(
         id = ObjectId("542c2b97bac0505474109b41"),
-        name = "name",
-        description = "description",
         login = "login",
         inventory = null
     )
