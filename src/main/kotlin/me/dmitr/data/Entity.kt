@@ -6,27 +6,34 @@ import org.springframework.data.mongodb.core.mapping.Document
 
 abstract class Entity {
     abstract var id: ObjectId
-    abstract var name: String
-    abstract var description: String
 }
 
-data class Figure (
+data class Figure(
     @Id
     override var id: ObjectId,
-    override var name: String,
-    override var description: String,
-    val color: Short,
-    val type: FigureType
-) : Entity()
+    var name: String,
+    var color: Short,
+    var type: FigureType
+): Entity()
 
 @Document(collection = "game")
-data class Game (
+data class Game(
     @Id
     override var id: ObjectId,
-    override var name: String,
-    override var description: String,
-    val xSize: Short,
-    val ySize: Short,
-//  @DocumentReference(lazy=true)
-    val figures: List<Figure>
-) : Entity()
+    var xSize: Short,
+    var ySize: Short,
+    var figures: List<Figure>?
+): Entity()
+
+@Document(collection = "player")
+data class Player(
+    @Id
+    override var id: ObjectId,
+    var login: String,
+    var inventory: Inventory?
+): Entity()
+
+data class Inventory(
+    @Id
+    override var id: ObjectId
+): Entity()
