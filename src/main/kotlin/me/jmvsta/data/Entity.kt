@@ -14,11 +14,7 @@ data class Figure(
     var name: String,
     var color: Short,
     var type: FigureType
-): Entity() {
-    companion object {
-        const val MAX_LEN = 20
-    }
-}
+): Entity()
 
 @Document(collection = "game")
 data class Game(
