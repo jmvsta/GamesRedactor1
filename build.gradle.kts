@@ -9,7 +9,7 @@ plugins {
     kotlin("plugin.spring") version "1.6.10"
 }
 
-group = "me.dmitr.GamesRedactor1"
+group = "me.jmvsta.GamesRedactor1"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -41,5 +41,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("GamesRedactorKt")
+    mainClass.set("me.jmvsta.GamesRedactorKt")
 }
