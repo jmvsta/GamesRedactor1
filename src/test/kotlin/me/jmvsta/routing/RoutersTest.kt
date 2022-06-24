@@ -1,18 +1,16 @@
-package me.dmitr.routing
+package me.jmvsta.routing
 
 import com.ninjasquad.springmockk.MockkBean
 import io.mockk.every
-import me.dmitr.data.Figure
-import me.dmitr.data.FigureType.*
-import me.dmitr.data.Game
-import me.dmitr.data.Player
-import org.bson.types.ObjectId
+import me.jmvsta.data.*
+import me.jmvsta.data.FigureType.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest
 import org.springframework.context.annotation.Import
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.server.ServerResponse
+import java.time.LocalDateTime
 
 
 @WebFluxTest
@@ -22,11 +20,13 @@ class GamesRouterTest(@Autowired private val client: WebTestClient) {
     @MockkBean
     private lateinit var handler : GamesHandler
 
-    private fun aGame() = Game (
-            id = ObjectId("542c2b97bac0505474109b41"),
-            xSize = 8,
-            ySize = 8,
-            figures = null
+    private fun aGame() = Game(
+            id = 0L,
+            gameState = GameState(0L),
+            createdBy = Player(0L, "login", Inventory(0L)),
+            players = listOf(),
+            currentPlayerId = 0L,
+            chatHistory = ChatHistory(0L, "type", Data("data"), LocalDateTime.now())
         )
 
     @Test
@@ -114,7 +114,7 @@ class FiguresRouterTest(@Autowired private val client: WebTestClient) {
     private lateinit var handler : FiguresHandler
 
     private fun aFigure() = Figure(
-        id = ObjectId("542c2b97bac0505474109b41"),
+        id = 0L,
         name = "name",
         color = 1,
         type = CHECKER
@@ -205,7 +205,7 @@ class PlayersRouterTest(@Autowired private val client: WebTestClient) {
     private lateinit var handler : PlayersHandler
 
     private fun aPlayer() = Player(
-        id = ObjectId("542c2b97bac0505474109b41"),
+        id = 0L,
         login = "login",
         inventory = null
     )

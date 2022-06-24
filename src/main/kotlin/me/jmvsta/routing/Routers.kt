@@ -1,4 +1,4 @@
-package me.dmitr.routing
+package me.jmvsta.routing
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

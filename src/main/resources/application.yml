@@ -4,6 +4,14 @@ spring:
       host: localhost
       port: 27017
       database: games
+logging:
+  level:
+    web: DEBUG
+    reactor:
+      netty:
+        http:
+          client:
+            HttpClient: DEBUG
 #
 #  security:
 #    oauth2:

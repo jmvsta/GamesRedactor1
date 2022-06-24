@@ -19,10 +19,10 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux:2.6.7")
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.6")
-    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.1")
+    runtimeOnly("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.2")
     implementation("org.springframework.boot:spring-boot-configuration-processor:2.6.7")
     implementation("com.ninja-squad:springmockk:3.1.1")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb-reactive:2.7.1")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")

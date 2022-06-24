@@ -1,4 +1,4 @@
-package me.dmitr
+package me.jmvsta
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.context.properties.EnableConfigurationProperties

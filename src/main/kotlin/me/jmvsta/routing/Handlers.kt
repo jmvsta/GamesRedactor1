@@ -1,11 +1,13 @@
-package me.dmitr.routing
+package me.jmvsta.routing
 
-import me.dmitr.data.Figure
-import me.dmitr.data.Game
-import me.dmitr.data.Player
-import org.bson.types.ObjectId
+import me.jmvsta.data.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.data.mongodb.core.FindAndModifyOptions.options
+import org.springframework.data.mongodb.core.ReactiveMongoOperations
+import org.springframework.data.mongodb.core.query.Criteria.where
+import org.springframework.data.mongodb.core.query.Query.query
+import org.springframework.data.mongodb.core.query.Update
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -14,18 +16,57 @@ import org.springframework.web.reactive.function.server.ServerResponse
 import reactor.core.publisher.Mono
 
 @Component
+class SequenceGenerator(@Autowired private val mongoOperations: ReactiveMongoOperations) {
+
+    fun <T> generateSequence(clazz: Class<T>): Long {
+        var sequenceName: String? = null
+        when (clazz) {
+            Player::class.java -> sequenceName = "players_sequence"
+            Figure::class.java -> sequenceName = "figures_sequence"
+            Game::class.java -> sequenceName = "games_sequence"
+            Inventory::class.java -> sequenceName = "inventories_sequence"
+        }
+        return mongoOperations.findAndModify(
+            query(where("_id").`is`(sequenceName)),
+            Update().inc("seq", 1), options().returnNew(true).upsert(true),
+            DatabaseSequence::class.java
+        ).toFuture().get().seq
+    }
+}
+
+@Component
 class GamesHandler {
 
     @Qualifier("gamesRepository")
     @Autowired
-    lateinit var gamesRepository: ReactiveMongoRepository<Game, ObjectId>
+    private lateinit var gamesRepository: ReactiveMongoRepository<Game, Long>
+
+    @Qualifier("playersRepository")
+    @Autowired
+    private lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
+
+    @Autowired
+    private lateinit var sequenceGenerator: SequenceGenerator
 
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Game::class.java)
-            .flatMap { body -> ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(gamesRepository.save(body), Game::class.java)
+            .flatMap { body ->
+                body.id = sequenceGenerator.generateSequence(Game::class.java)
+                body.players?.forEach { player ->
+                    player.id = sequenceGenerator.generateSequence(Player::class.java)
+                    playersRepository.save(player)
+                        .subscribe { result -> println("Entity has been saved: $result") }
+                }
+                body.createdBy.id = sequenceGenerator.generateSequence(Player::class.java)
+//              FIXME: redo in reactive approach with @DBRef, currently saves both objects (in parent object
+//               and in it's collection)
+//                  https://www.baeldung.com/cascading-with-dbref-and-lifecycle-events-in-spring-data-mongodb
+                playersRepository.save(body.createdBy)
+                    .subscribe { result -> println("Entity has been saved: $result") }
+                return@flatMap ServerResponse
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(gamesRepository.save(body), Game::class.java)
             }
     }
 
@@ -33,7 +74,7 @@ class GamesHandler {
          return ServerResponse
              .ok()
              .contentType(MediaType.APPLICATION_JSON)
-             .body(gamesRepository.findById(ObjectId(request.pathVariable("id"))), Game::class.java)
+             .body(gamesRepository.findById(request.pathVariable("id").toLong()), Game::class.java)
      }
 
     fun readAll(request: ServerRequest): Mono<ServerResponse> {
@@ -56,7 +97,7 @@ class GamesHandler {
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(gamesRepository.deleteById(ObjectId(request.pathVariable("id"))), Game::class.java)
+            .body(gamesRepository.deleteById(request.pathVariable("id").toLong()), Game::class.java)
     }
 
 }
@@ -66,7 +107,7 @@ class FiguresHandler {
 
     @Qualifier("figuresRepository")
     @Autowired
-    lateinit var figuresRepository: ReactiveMongoRepository<Figure, ObjectId>
+    lateinit var figuresRepository: ReactiveMongoRepository<Figure, Long>
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Figure::class.java)
             .flatMap { body -> ServerResponse
@@ -80,7 +121,7 @@ class FiguresHandler {
          return ServerResponse
              .ok()
              .contentType(MediaType.APPLICATION_JSON)
-             .body(figuresRepository.findById(ObjectId(request.pathVariable("id"))), Figure::class.java)
+             .body(figuresRepository.findById(request.pathVariable("id").toLong()), Figure::class.java)
     }
 
     fun readAll(request: ServerRequest): Mono<ServerResponse> {
@@ -103,7 +144,7 @@ class FiguresHandler {
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(figuresRepository.deleteById(ObjectId(request.pathVariable("id"))), Figure::class.java)
+            .body(figuresRepository.deleteById(request.pathVariable("id").toLong()), Figure::class.java)
     }
 
 }
@@ -113,7 +154,7 @@ class PlayersHandler {
 
     @Qualifier("playersRepository")
     @Autowired
-    lateinit var playersRepository: ReactiveMongoRepository<Player, ObjectId>
+    lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
 
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Player::class.java)
@@ -128,7 +169,7 @@ class PlayersHandler {
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(playersRepository.findById(ObjectId(request.pathVariable("id"))), Player::class.java)
+            .body(playersRepository.findById(request.pathVariable("id").toLong()), Player::class.java)
     }
 
     fun readAll(request: ServerRequest): Mono<ServerResponse> {
@@ -151,7 +192,7 @@ class PlayersHandler {
         return ServerResponse
             .ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(playersRepository.deleteById(ObjectId(request.pathVariable("id"))), Player::class.java)
+            .body(playersRepository.deleteById(request.pathVariable("id").toLong()), Player::class.java)
     }
 
 }
