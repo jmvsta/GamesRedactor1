@@ -1,9 +1,8 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: games
+      uri: mongodb://odmen:J2CSWugvgGG5ykQ@cluster0-shard-00-00.vlx5s.mongodb.net:27017,cluster0-shard-00-01.vlx5s.mongodb.net:27017,cluster0-shard-00-02.vlx5s.mongodb.net:27017/test?replicaSet=atlas-3co1gv-shard-0&ssl=true&authSource=admin
+
 logging:
   level:
     web: DEBUG

@@ -38,15 +38,12 @@ class SequenceGenerator(@Autowired private val mongoOperations: ReactiveMongoOpe
 class GamesHandler {
 
     @Qualifier("gamesRepository")
-    @Autowired
-    private lateinit var gamesRepository: ReactiveMongoRepository<Game, Long>
+    @Autowired private lateinit var gamesRepository: ReactiveMongoRepository<Game, Long>
 
     @Qualifier("playersRepository")
-    @Autowired
-    private lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
+    @Autowired private lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
 
-    @Autowired
-    private lateinit var sequenceGenerator: SequenceGenerator
+    @Autowired private lateinit var sequenceGenerator: SequenceGenerator
 
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Game::class.java)
@@ -106,8 +103,8 @@ class GamesHandler {
 class FiguresHandler {
 
     @Qualifier("figuresRepository")
-    @Autowired
-    lateinit var figuresRepository: ReactiveMongoRepository<Figure, Long>
+    @Autowired lateinit var figuresRepository: ReactiveMongoRepository<Figure, Long>
+
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Figure::class.java)
             .flatMap { body -> ServerResponse
@@ -153,15 +150,18 @@ class FiguresHandler {
 class PlayersHandler {
 
     @Qualifier("playersRepository")
-    @Autowired
-    lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
+    @Autowired lateinit var playersRepository: ReactiveMongoRepository<Player, Long>
+
+    @Autowired private lateinit var sequenceGenerator: SequenceGenerator
 
     fun create(request: ServerRequest): Mono<ServerResponse> {
         return request.bodyToMono(Player::class.java)
-            .flatMap { body -> ServerResponse
-                .ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(playersRepository.save(body), Player::class.java)
+            .flatMap { body ->
+                body.id = sequenceGenerator.generateSequence(Player::class.java)
+                return@flatMap ServerResponse
+                    .ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(playersRepository.save(body), Player::class.java)
             }
     }
 

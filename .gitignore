@@ -5,3 +5,4 @@ build/
 *.iml
 *.ipr
 *.bin
+/src/main/resources/application-local.yml
