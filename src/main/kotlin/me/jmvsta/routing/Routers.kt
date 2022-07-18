@@ -47,4 +47,5 @@ class PlayersRouterConfig(private val handler: PlayersHandler) {
             DELETE("/players/{id}", handler::delete)
         }
     }
+
 }
