@@ -19,7 +19,7 @@ data class Figure(
 @Document(collection = "game")
 data class Game(
     @Id override var id: Long,
-    var gameState: GameState?,
+    var gameState: GameState,
     var createdBy: Player,
     var players: List<Player>?,
     var currentPlayerId: Long,
@@ -68,3 +68,5 @@ enum class FigureType {
     CHECKER,
     PAWN
 }
+
+data class ChatObject(var userName: String? = null, var message: String? = null)
